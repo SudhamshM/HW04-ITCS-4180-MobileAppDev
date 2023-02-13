@@ -183,7 +183,8 @@ public class BACFragment extends Fragment {
         mListener = (BACFragmentListener) context;
     }
 
-    interface BACFragmentListener{
+    interface BACFragmentListener
+    {
         void gotoSetProfile();
         void clearAllDrinks();
         ArrayList<Drink> getAllDrinks();

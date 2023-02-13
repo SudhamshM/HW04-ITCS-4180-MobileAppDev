@@ -16,12 +16,10 @@ public class ViewDrinksRecyclerAdapter
         extends RecyclerView.Adapter<ViewDrinksRecyclerAdapter.DrinkViewHolder>
 {
     private ArrayList<Drink> drinksList;
-    IDrinkViewer mListener;
 
-    public ViewDrinksRecyclerAdapter(ArrayList<Drink> drinksList, IDrinkViewer listener)
+    public ViewDrinksRecyclerAdapter(ArrayList<Drink> drinksList)
     {
         this.drinksList = drinksList;
-        this.mListener = (IDrinkViewer) listener;
     }
 
     @NonNull
@@ -29,7 +27,7 @@ public class ViewDrinksRecyclerAdapter
     public DrinkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drink_row, parent, false);
-        DrinkViewHolder viewHolder = new DrinkViewHolder(view, mListener);
+        DrinkViewHolder viewHolder = new DrinkViewHolder(view);
         return viewHolder;
     }
 
@@ -42,6 +40,15 @@ public class ViewDrinksRecyclerAdapter
         holder.addedDate.setText(drink.addedOn.toString());
         holder.position = position;
         holder.drink = drink;
+
+        holder.deleteDrinkImage.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                deleteDrink(holder.position);
+            }
+        });
     }
 
 
@@ -51,29 +58,29 @@ public class ViewDrinksRecyclerAdapter
         return drinksList.size();
     }
 
+    public void deleteDrink(int position)
+    {
+        this.drinksList.remove(position);
+        notifyDataSetChanged();
+    }
+
     public static class DrinkViewHolder extends RecyclerView.ViewHolder
     {
         TextView alcPercent, addedDate, drinkSize;
+        ImageView deleteDrinkImage;
         Drink drink;
         int position;
 
-        IDrinkViewer mListener;
 
-        public DrinkViewHolder(@NonNull View itemView, IDrinkViewer mListener)
+        public DrinkViewHolder(@NonNull View itemView)
         {
             super(itemView);
             alcPercent = itemView.findViewById(R.id.textAlcPercentRow);
             addedDate = itemView.findViewById(R.id.textAddedDateRow);
             drinkSize = itemView.findViewById(R.id.textAddedDrinkSizeRow);
-            this.mListener = (IDrinkViewer) mListener;
-
-
+            deleteDrinkImage = itemView.findViewById(R.id.imageDeleteDrinkRow);
 
         }
     }
 
-    public interface IDrinkViewer
-    {
-        void deleteDrink(int position);
-    }
 }
