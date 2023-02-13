@@ -141,7 +141,8 @@ public class BACFragment extends Fragment {
         }
     }
 
-    private void displayBAC(){
+    private void displayBAC()
+    {
         binding.textViewNoDrinks.setText("# Drinks: " + mDrinks.size());
         double value_r = 0.66;
         if(mProfile.getGender().equals("Male")){
@@ -165,6 +166,12 @@ public class BACFragment extends Fragment {
         } else {
             binding.textViewStatus.setText("Over the limit!");
             binding.viewStatus.setBackgroundResource(R.color.overlimit_color);
+        }
+
+        if (bac > 0.25)
+        {
+            binding.buttonAddDrink.setEnabled(false);
+            Toast.makeText(getActivity(), "No more drinks for you.", Toast.LENGTH_SHORT).show();
         }
     }
 

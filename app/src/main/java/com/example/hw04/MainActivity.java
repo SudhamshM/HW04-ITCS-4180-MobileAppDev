@@ -10,7 +10,8 @@ public class MainActivity extends AppCompatActivity
         implements BACFragment.BACFragmentListener,
         SetProfileFragment.SetProfileFragmentListener,
         AddDrinkFragment.AddDrinkFragmentListener,
-        ViewDrinksFragment.ViewDrinksFragmentListener
+        ViewDrinksFragment.ViewDrinksFragmentListener,
+        ViewDrinksRecyclerAdapter.IDrinkViewer
 {
     ArrayList<Drink> drinks = new ArrayList<>();
 
@@ -92,5 +93,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void closeViewDrinks() {
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void deleteDrink(int position)
+    {
+        getAllDrinks().remove(position);
     }
 }

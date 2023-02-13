@@ -18,10 +18,12 @@ import com.example.hw04.databinding.FragmentViewDrinksBinding;
 import java.util.ArrayList;
 
 public class ViewDrinksFragment extends Fragment
+    implements ViewDrinksRecyclerAdapter.IDrinkViewer
 {
     private static final String ARG_PARAM_DRINKS = "ARG_PARAM_DRINKS";
     public ArrayList<Drink> mDrinks;
     ViewDrinksRecyclerAdapter adapter;
+    ViewDrinksRecyclerAdapter.IDrinkViewer mListener2;
     public ViewDrinksFragment()
     {
         // Required empty public constructor
@@ -69,7 +71,7 @@ public class ViewDrinksFragment extends Fragment
         });
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setHasFixedSize(true);
-        adapter = new ViewDrinksRecyclerAdapter(mDrinks);
+        adapter = new ViewDrinksRecyclerAdapter(mDrinks, mListener2);
         binding.recyclerView.setAdapter(adapter);
     }
 
@@ -79,7 +81,16 @@ public class ViewDrinksFragment extends Fragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (ViewDrinksFragmentListener) context;
+        mListener2 = (ViewDrinksRecyclerAdapter.IDrinkViewer) context;
     }
+
+    @Override
+    public void deleteDrink(int position)
+    {
+        mDrinks.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
 
     interface ViewDrinksFragmentListener
     {

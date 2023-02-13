@@ -3,6 +3,7 @@ package com.example.hw04;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,13 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
-public class ViewDrinksRecyclerAdapter extends RecyclerView.Adapter<ViewDrinksRecyclerAdapter.DrinkViewHolder>
+public class ViewDrinksRecyclerAdapter
+        extends RecyclerView.Adapter<ViewDrinksRecyclerAdapter.DrinkViewHolder>
 {
     private ArrayList<Drink> drinksList;
+    IDrinkViewer mListener;
 
-    public ViewDrinksRecyclerAdapter(ArrayList<Drink> drinksList)
+    public ViewDrinksRecyclerAdapter(ArrayList<Drink> drinksList, IDrinkViewer listener)
     {
         this.drinksList = drinksList;
+        this.mListener = (IDrinkViewer) listener;
     }
 
     @NonNull
@@ -25,7 +29,7 @@ public class ViewDrinksRecyclerAdapter extends RecyclerView.Adapter<ViewDrinksRe
     public DrinkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drink_row, parent, false);
-        DrinkViewHolder viewHolder = new DrinkViewHolder(view);
+        DrinkViewHolder viewHolder = new DrinkViewHolder(view, mListener);
         return viewHolder;
     }
 
@@ -33,9 +37,10 @@ public class ViewDrinksRecyclerAdapter extends RecyclerView.Adapter<ViewDrinksRe
     public void onBindViewHolder(@NonNull DrinkViewHolder holder, int position)
     {
         Drink drink = drinksList.get(position);
-        holder.alcPercent.setText(drink.alcohol + " % Alcohol");
+        holder.alcPercent.setText((int) drink.alcohol + " % Alcohol");
         holder.drinkSize.setText(drink.size + " oz");
         holder.addedDate.setText(drink.addedOn.toString());
+        holder.position = position;
         holder.drink = drink;
     }
 
@@ -50,15 +55,25 @@ public class ViewDrinksRecyclerAdapter extends RecyclerView.Adapter<ViewDrinksRe
     {
         TextView alcPercent, addedDate, drinkSize;
         Drink drink;
+        int position;
 
-        public DrinkViewHolder(@NonNull View itemView)
+        IDrinkViewer mListener;
+
+        public DrinkViewHolder(@NonNull View itemView, IDrinkViewer mListener)
         {
             super(itemView);
             alcPercent = itemView.findViewById(R.id.textAlcPercentRow);
             addedDate = itemView.findViewById(R.id.textAddedDateRow);
             drinkSize = itemView.findViewById(R.id.textAddedDrinkSizeRow);
+            this.mListener = (IDrinkViewer) mListener;
+
 
 
         }
+    }
+
+    public interface IDrinkViewer
+    {
+        void deleteDrink(int position);
     }
 }
