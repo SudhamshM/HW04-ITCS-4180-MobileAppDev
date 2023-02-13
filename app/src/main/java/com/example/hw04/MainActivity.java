@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void sendDrink(Drink drink) {
+    public void sendDrink(Drink drink)
+    {
         drinks.add(drink);
         getSupportFragmentManager().popBackStack();
     }
