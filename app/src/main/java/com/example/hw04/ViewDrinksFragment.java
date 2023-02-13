@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +20,8 @@ import java.util.ArrayList;
 public class ViewDrinksFragment extends Fragment
 {
     private static final String ARG_PARAM_DRINKS = "ARG_PARAM_DRINKS";
-    private ArrayList<Drink> mDrinks;
+    public ArrayList<Drink> mDrinks;
+    ViewDrinksRecyclerAdapter adapter;
     public ViewDrinksFragment()
     {
         // Required empty public constructor
@@ -64,6 +67,10 @@ public class ViewDrinksFragment extends Fragment
                 mListener.closeViewDrinks();
             }
         });
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setHasFixedSize(true);
+        adapter = new ViewDrinksRecyclerAdapter(mDrinks);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     ViewDrinksFragmentListener mListener;
@@ -78,5 +85,7 @@ public class ViewDrinksFragment extends Fragment
     {
         void closeViewDrinks();
     }
+
+
 
 }

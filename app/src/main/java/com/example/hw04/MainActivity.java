@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
         //send it the profile
         //pop the back stack.
         BACFragment fragment = (BACFragment) getSupportFragmentManager().findFragmentByTag("bac-fragment");
-        if(fragment != null){
+        if(fragment != null)
+        {
             fragment.setProfile(profile);
         }
         getSupportFragmentManager().popBackStack();
