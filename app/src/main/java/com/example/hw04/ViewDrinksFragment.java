@@ -30,8 +30,6 @@ public class ViewDrinksFragment extends Fragment
     public ArrayList<Drink> mDrinks;
     ViewDrinksRecyclerAdapter adapter;
 
-    int alcPctSortOrder = 0;
-    int addedDateSortOrder = 0;
     public ViewDrinksFragment()
     {
         // Required empty public constructor
@@ -66,62 +64,28 @@ public class ViewDrinksFragment extends Fragment
 
     public void sortAlcByPct(int order)
     {
-        Log.d("hw04", "onClick: imageAlcAscend order: " + alcPctSortOrder);
-        if (order == 1 && alcPctSortOrder != 1)
+        Log.d("hw04", "onClick: sorting by alc percent ");
+        Collections.sort(this.mDrinks, new Comparator<Drink>()
         {
-            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            @Override
+            public int compare(Drink drink1, Drink drink2)
             {
-                @Override
-                public int compare(Drink drink1, Drink drink2)
-                {
-                    return Double.compare(drink1.alcohol, drink2.alcohol);
-                }
-            });
-            alcPctSortOrder = 1;
-        }
-        else if (order == -1 && alcPctSortOrder != -1)
-        {
-            Collections.sort(this.mDrinks, new Comparator<Drink>()
-            {
-
-                @Override
-                public int compare(Drink drink1, Drink drink2)
-                {
-                    return -1 * Double.compare(drink1.alcohol, drink2.alcohol);
-                }
-            });
-            alcPctSortOrder = -1;
-        }
+                return order * Double.compare(drink1.alcohol, drink2.alcohol);
+            }
+        });
     }
 
     public void sortAlcByDate(int order)
     {
-        Log.d("hw04", "onClick: date order: " + addedDateSortOrder);
-        if (order == 1 && addedDateSortOrder != 1)
+        Log.d("hw04", "onClick: sorting by date");
+        Collections.sort(this.mDrinks, new Comparator<Drink>()
         {
-            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            @Override
+            public int compare(Drink drink1, Drink drink2)
             {
-
-                @Override
-                public int compare(Drink drink1, Drink drink2)
-                {
-                    return drink1.addedOn.compareTo(drink2.addedOn);
-                }
-            });
-            addedDateSortOrder = 1;
-        }
-        else if (order == -1 && addedDateSortOrder != -1)
-        {
-            Collections.sort(this.mDrinks, new Comparator<Drink>()
-            {
-                @Override
-                public int compare(Drink drink1, Drink drink2)
-                {
-                    return drink2.addedOn.compareTo(drink1.addedOn);
-                }
-            });
-            addedDateSortOrder = -1;
-        }
+                return order * drink1.addedOn.compareTo(drink2.addedOn);
+            }
+        });
 
     }
 
