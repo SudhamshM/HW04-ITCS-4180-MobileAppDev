@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,18 @@ import android.widget.Toast;
 import com.example.hw04.databinding.FragmentViewDrinksBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class ViewDrinksFragment extends Fragment
 {
     private static final String ARG_PARAM_DRINKS = "ARG_PARAM_DRINKS";
     public ArrayList<Drink> mDrinks;
     ViewDrinksRecyclerAdapter adapter;
+
+    int alcPctSortOrder = 0;
+    int addedDateSortOrder = 0;
     public ViewDrinksFragment()
     {
         // Required empty public constructor
@@ -57,6 +64,67 @@ public class ViewDrinksFragment extends Fragment
         return binding.getRoot();
     }
 
+    public void sortAlcByPct(int order)
+    {
+        Log.d("hw04", "onClick: imageAlcAscend order: " + alcPctSortOrder);
+        if (order == 1 && alcPctSortOrder != 1)
+        {
+            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            {
+                @Override
+                public int compare(Drink drink1, Drink drink2)
+                {
+                    return Double.compare(drink1.alcohol, drink2.alcohol);
+                }
+            });
+            alcPctSortOrder = 1;
+        }
+        else if (order == -1 && alcPctSortOrder != -1)
+        {
+            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            {
+
+                @Override
+                public int compare(Drink drink1, Drink drink2)
+                {
+                    return -1 * Double.compare(drink1.alcohol, drink2.alcohol);
+                }
+            });
+            alcPctSortOrder = -1;
+        }
+    }
+
+    public void sortAlcByDate(int order)
+    {
+        Log.d("hw04", "onClick: date order: " + addedDateSortOrder);
+        if (order == 1 && addedDateSortOrder != 1)
+        {
+            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            {
+
+                @Override
+                public int compare(Drink drink1, Drink drink2)
+                {
+                    return drink1.addedOn.compareTo(drink2.addedOn);
+                }
+            });
+            addedDateSortOrder = 1;
+        }
+        else if (order == -1 && addedDateSortOrder != -1)
+        {
+            Collections.sort(this.mDrinks, new Comparator<Drink>()
+            {
+                @Override
+                public int compare(Drink drink1, Drink drink2)
+                {
+                    return drink2.addedOn.compareTo(drink1.addedOn);
+                }
+            });
+            addedDateSortOrder = -1;
+        }
+
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -68,6 +136,47 @@ public class ViewDrinksFragment extends Fragment
             mListener.closeViewDrinks();
 
         }
+
+        binding.imageAlcAscend.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                sortAlcByPct(1);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.imageAlcDescend.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                sortAlcByPct(-1);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.imageDateAscend.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                sortAlcByDate(1);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.imageDateDescend.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                sortAlcByDate(-1);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         binding.buttonClose.setOnClickListener(new View.OnClickListener()
         {
@@ -131,10 +240,10 @@ public class ViewDrinksFragment extends Fragment
                 public void onClick(View view)
                 {
                     deleteDrink(holder.position);
-                    notifyDataSetChanged();
                 }
 
             });
+
         }
 
 
